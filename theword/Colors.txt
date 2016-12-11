@@ -1,0 +1,3 @@
+RaisinBlack : #222222
+Snow        : #FBFBFB
+SeaBlue     : #006992
