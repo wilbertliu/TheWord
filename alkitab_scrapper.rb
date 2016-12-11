@@ -1,16 +1,29 @@
 require 'nokogiri'
 require 'open-uri'
+require 'json'
 require 'pry'
 
 ROOT_URL = 'http://alkitab.mobi/tb'
 
+json = { books: [] }
 doc = Nokogiri::HTML(open("#{ROOT_URL}"))
 
 doc.css('.style0 a').each do |book_link|
+  book_hash = { name: '', chapters: [] }
   book = book_link.content
   chapter_doc = Nokogiri::HTML(open("#{ROOT_URL}/#{book}"))
 
+  chapter_doc.css('.style1').each do |style_1|
+    if style_1.css('strong').count == 1
+      book_hash[:name] = style_1.css('strong').first.content
+      break
+    end
+  end
+
+  puts "Scrapping -> #{book_hash[:name]}"
+
   for chapter in 1..chapter_doc.css('.style2 a').count
+    chapter_hash = { number: chapter, verses: [] }
     verse_doc = Nokogiri::HTML(open("#{ROOT_URL}/#{book}/#{chapter}"))
 
     verse_doc.css('.passage p').each do |verse_link|
@@ -18,12 +31,28 @@ doc.css('.style0 a').each do |book_link|
         next
       end
 
+      verse_hash = { type: '', content: '' }
+
       if verse_link.css('.paragraphtitle').count > 0
-        puts verse_link.content
+        verse_hash[:type] = 'title'
+        verse_hash[:content] = verse_link.content
       elsif verse_link.css('span[data-begin]').count > 0
-        puts verse_link.css('span.reftext').first.content
-        puts verse_link.css('span[data-begin]').first.content
+        verse_hash[:type] = 'verse'
+        verse_hash[:number] = verse_link.css('span.reftext').first.content
+        verse_hash[:content] = verse_link.css('span[data-begin]').first.content
       end
+
+      chapter_hash[:verses].push(verse_hash)
     end
+
+    book_hash[:chapters].push(chapter_hash)
   end
+
+  json[:books].push(book_hash)
+
+  puts 'Done!'
+end
+
+File.open('TB.json', 'w') do |f|
+  f.write(JSON.pretty_generate(json))
 end
