@@ -34,7 +34,7 @@ doc.css('.style0 a').each do |book_link|
       verse_hash = { type: '', content: '' }
 
       if verse_link.css('.paragraphtitle').count > 0
-        verse_hash[:type] = 'title'
+        verse_hash[:type] = 'passage'
         verse_hash[:content] = verse_link.content
       elsif verse_link.css('span[data-begin]').count > 0
         verse_hash[:type] = 'verse'
@@ -50,9 +50,9 @@ doc.css('.style0 a').each do |book_link|
 
   json[:books].push(book_hash)
 
-  puts 'Done!'
-end
+  File.open('TB.json', 'w') do |f|
+    f.write(JSON.pretty_generate(json))
+  end
 
-File.open('TB.json', 'w') do |f|
-  f.write(JSON.pretty_generate(json))
+  puts 'Done!'
 end
