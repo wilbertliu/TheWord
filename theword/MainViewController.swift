@@ -38,7 +38,10 @@ class MainViewController: UIViewController {
                 json = JSON(data: data)
 
                 if json != JSON.null {
+                    book = json!["books"][0]["name"].stringValue
                     scrollPoints = [CGPoint](repeating: CGPoint(x: 0, y: 0), count: json!["books"][0]["chapters"].array!.count)
+
+                    navigationItem.title = "\(book) \(chapter)"
                 }
             } catch let error {
                 print(error.localizedDescription)
@@ -118,9 +121,9 @@ extension TableViewDataSource: UITableViewDataSource {
 
 }
 
+
+extension ScrollViewDelegate: UIScrollViewDelegate {
 // TODO: Scroll position saving
-//extension ScrollViewDelegate: UIScrollViewDelegate {
-//
 //    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 //        if let tableView = cell.viewWithTag(-1) as? UITableView {
 //            tableView.setContentOffset(scrollPoints[indexPath.item], animated: false)
@@ -140,4 +143,13 @@ extension TableViewDataSource: UITableViewDataSource {
 //        }
 //    }
 //
-//}
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.isEqual(collectionView) {
+            if let indexPath = collectionView.indexPathForItem(at: scrollView.contentOffset) {
+                chapter = indexPath.item + 1
+                navigationItem.title = "\(book) \(chapter)"
+            }
+        }
+    }
+
+}
