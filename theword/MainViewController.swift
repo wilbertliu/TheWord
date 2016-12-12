@@ -101,13 +101,13 @@ extension TableViewDataSource: UITableViewDataSource {
 
         if identifier == passageCell {
             let passageLabel = cell.viewWithTag(1) as! UILabel
-            passageLabel.text = verse["content"]?.string!
+            passageLabel.text = verse["content"]?.stringValue
         } else {
             let numberLabel = cell.viewWithTag(1) as! UILabel
-            numberLabel.text = verse["number"]?.string!
+            numberLabel.text = verse["number"]?.stringValue
 
             let verseLabel = cell.viewWithTag(2) as! UILabel
-            verseLabel.text = verse["content"]?.string!
+            verseLabel.text = verse["content"]?.stringValue
             verseLabel.snp.makeConstraints { (maker) in
                 maker.trailing.equalToSuperview().offset(-cell.contentView.frame.width * 0.09)
             }
