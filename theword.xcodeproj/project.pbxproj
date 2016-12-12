@@ -15,6 +15,7 @@
 		CF781E2D1DFC05090019C3B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF781E2B1DFC05090019C3B2 /* LaunchScreen.storyboard */; };
 		CF781E351DFC060D0019C3B2 /* Colors.txt in Resources */ = {isa = PBXBuildFile; fileRef = CF781E341DFC060D0019C3B2 /* Colors.txt */; };
 		CF781E371DFC09930019C3B2 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF781E361DFC09930019C3B2 /* MainViewController.swift */; };
+		CFA4F3751DFE3305005B938C /* TB.json in Resources */ = {isa = PBXBuildFile; fileRef = CFA4F3741DFE3305005B938C /* TB.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		CF781E2E1DFC05090019C3B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF781E341DFC060D0019C3B2 /* Colors.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Colors.txt; sourceTree = "<group>"; };
 		CF781E361DFC09930019C3B2 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		CFA4F3741DFE3305005B938C /* TB.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TB.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 				CF781E291DFC05090019C3B2 /* Assets.xcassets */,
 				CF781E341DFC060D0019C3B2 /* Colors.txt */,
 				CF781E2E1DFC05090019C3B2 /* Info.plist */,
+				CFA4F3741DFE3305005B938C /* TB.json */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF781E2D1DFC05090019C3B2 /* LaunchScreen.storyboard in Resources */,
+				CFA4F3751DFE3305005B938C /* TB.json in Resources */,
 				CF781E2A1DFC05090019C3B2 /* Assets.xcassets in Resources */,
 				CF781E351DFC060D0019C3B2 /* Colors.txt in Resources */,
 				CF781E281DFC05090019C3B2 /* Main.storyboard in Resources */,
