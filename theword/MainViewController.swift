@@ -21,11 +21,10 @@ private let verseCell = "verseCell"
 
 class MainViewController: UIViewController {
 
-    var book = "Kejadian"
-    var chapter = 1
-    var verse = 1
-    var scrollPoints = [CGPoint]()
+// TODO: Scroll position saving
+//    var scrollPoints = [CGPoint]()
     var json: JSON?
+    var booksData = [[String: Any]]()
 
     @IBOutlet weak var collectionView: UICollectionView!
 
@@ -38,9 +37,22 @@ class MainViewController: UIViewController {
                 json = JSON(data: data)
 
                 if json != JSON.null {
-                    book = json!["books"][0]["name"].stringValue
-                    scrollPoints = [CGPoint](repeating: CGPoint(x: 0, y: 0), count: json!["books"][0]["chapters"].array!.count)
+                    for book in json!["books"].arrayValue {
+                        let bookData = book["chapters"].arrayValue.map { (value) -> [String: Any] in
+                            var chapter = [String: Any]()
+                            chapter["book_name"] = book["name"].stringValue
+                            chapter["number"] = value["number"].intValue
+                            chapter["total_verse"] = value["total_verse"].intValue
+                            chapter["verses"] = value["verses"]
 
+                            return chapter
+                        }
+
+                        booksData += bookData
+                    }
+
+                    let book = booksData[0]["book_name"] as! String
+                    let chapter = booksData[0]["number"] as! Int
                     navigationItem.title = "\(book) \(chapter)"
                 }
             } catch let error {
@@ -58,7 +70,7 @@ class MainViewController: UIViewController {
 extension CollectionViewDataSource: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return json!["books"][0]["chapters"].array!.count
+        return booksData.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -70,8 +82,9 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
             tableView.rowHeight = UITableViewAutomaticDimension
             tableView.tableHeaderView = nil
 
-            let verse = json!["books"][0]["chapters"][indexPath.item]["verses"][0].dictionary!
-            if verse["type"] == "verse" {
+            let verses = booksData[indexPath.item]["verses"] as! JSON
+
+            if verses[0]["type"].stringValue == "verse" {
                 tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: collectionView.frame.width, height: 20))
             }
 
@@ -94,12 +107,13 @@ extension CollectionViewDelegateFlowLayout: UICollectionViewDelegateFlowLayout {
 extension TableViewDataSource: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return json!["books"][0]["chapters"][tableView.superview!.tag]["verses"].array!.count
+        return (booksData[tableView.superview!.tag]["verses"] as! JSON).count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let verse = json!["books"][0]["chapters"][tableView.superview!.tag]["verses"][indexPath.row].dictionary!
-        let identifier = verse["type"] == "passage" ? passageCell : verseCell
+        let verses = booksData[tableView.superview!.tag]["verses"] as! JSON
+        let verse = verses[indexPath.row].dictionaryValue
+        let identifier = verse["type"]?.stringValue == "passage" ? passageCell : verseCell
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
         if identifier == passageCell {
@@ -146,7 +160,8 @@ extension ScrollViewDelegate: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.isEqual(collectionView) {
             if let indexPath = collectionView.indexPathForItem(at: scrollView.contentOffset) {
-                chapter = indexPath.item + 1
+                let book = booksData[indexPath.item]["book_name"] as! String
+                let chapter = booksData[indexPath.item]["number"] as! Int
                 navigationItem.title = "\(book) \(chapter)"
             }
         }
