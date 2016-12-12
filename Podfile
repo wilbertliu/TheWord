@@ -6,5 +6,6 @@ target 'theword' do
   use_frameworks!
 
   # Pods for theword
-
+  pod 'SwiftyJSON'
+  pod 'SnapKit', '~> 3.0.2'
 end
