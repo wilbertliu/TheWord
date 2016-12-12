@@ -118,25 +118,26 @@ extension TableViewDataSource: UITableViewDataSource {
 
 }
 
-extension ScrollViewDelegate: UIScrollViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let tableView = cell.viewWithTag(-1) as? UITableView {
-            tableView.setContentOffset(scrollPoints[indexPath.item], animated: false)
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let tableView = cell.viewWithTag(-1) as? UITableView {
-            tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
-        }
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if !scrollView.isEqual(collectionView) {
-            let tableView = scrollView as! UITableView
-            scrollPoints[tableView.superview!.tag] = scrollView.contentOffset
-        }
-    }
-
-}
+// TODO: Scroll position saving
+//extension ScrollViewDelegate: UIScrollViewDelegate {
+//
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if let tableView = cell.viewWithTag(-1) as? UITableView {
+//            tableView.setContentOffset(scrollPoints[indexPath.item], animated: false)
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if let tableView = cell.viewWithTag(-1) as? UITableView {
+//            tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+//        }
+//    }
+//
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        if !scrollView.isEqual(collectionView) {
+//            let tableView = scrollView as! UITableView
+//            scrollPoints[tableView.superview!.tag] = scrollView.contentOffset
+//        }
+//    }
+//
+//}
